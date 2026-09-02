@@ -261,7 +261,7 @@ func formatFrame(frame runtime.Frame, packagePath, modulePath string) string {
 	location := path.Join(packagePath, file)
 	if isApplicationPackage(packagePath, modulePath) {
 		relativePackage := strings.TrimPrefix(strings.TrimPrefix(packagePath, modulePath), "/")
-		if packagePath == modulePath+"_test" || packagePath == "main" {
+		if packagePath == modulePath+"_test" || packagePath == sdkModulePath+"_test" || packagePath == "main" {
 			relativePackage = ""
 		}
 		location = path.Join("app", relativePackage, file)
@@ -282,8 +282,8 @@ func framePackage(function string) string {
 }
 
 func isApplicationPackage(packagePath, modulePath string) bool {
-	return packagePath == "main" || packagePath == modulePath || packagePath == modulePath+"_test" ||
-		(modulePath != "" && strings.HasPrefix(packagePath, modulePath+"/"))
+	return packagePath == "main" || packagePath == sdkModulePath+"_test" || packagePath == modulePath ||
+		packagePath == modulePath+"_test" || (modulePath != "" && strings.HasPrefix(packagePath, modulePath+"/"))
 }
 
 func safeContext(contextValues map[string]any, source string) map[string]any {
